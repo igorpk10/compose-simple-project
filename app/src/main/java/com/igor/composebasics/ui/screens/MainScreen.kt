@@ -1,13 +1,19 @@
 package com.igor.composebasics.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,53 +34,67 @@ import com.igor.composebasics.ui.theme.ComposeBasicsTheme
 @Composable
 fun HomeScreen(
     sections: Map<String, List<Product>>,
-    searchText: String = ""
+    searchText: String = "",
+    onFabClick: () -> Unit
 ) {
     var text by remember {
         mutableStateOf(searchText)
     }
 
-    Column {
-        SearchTextField(text){
-            text = it
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = onFabClick) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null )
+            }
         }
+    ) { paddingValues ->
+        Box(Modifier.padding(paddingValues)) {
+            Column {
+                SearchTextField(text) {
+                    text = it
+                }
 
-        if (text.isNullOrBlank()) {
-            LazyColumn(
-                Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
-            ) {
+                if (text.isNullOrBlank()) {
+                    LazyColumn(
+                        Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(vertical = 16.dp)
+                    ) {
 
-                for (section in sections) {
-                    val title = section.key
-                    val products = section.value
+                        for (section in sections) {
+                            val title = section.key
+                            val products = section.value
 
-                    item {
-                        ProductsSection(
-                            title = title,
-                            products = products
-                        )
+                            item {
+                                ProductsSection(
+                                    title = title,
+                                    products = products
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    val list: ArrayList<Product> = arrayListOf()
+                    sections.forEach { mapValues ->
+                        list.addAll(mapValues.value.filter {
+                            it.name.lowercase().contains(text.lowercase())
+                        })
+                    }
+
+                    LazyColumn(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(top = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(vertical = 16.dp)
+                    ) {
+                        items(list) {
+                            CardProductItem(product = it, Modifier.padding(horizontal = 16.dp))
+                        }
                     }
                 }
-            }
-        } else {
-            val list: ArrayList<Product> = arrayListOf()
-            sections.forEach { mapValues ->
-                list.addAll(mapValues.value.filter {
-                    it.name.lowercase().contains(text.lowercase())
-                })
-            }
 
-            LazyColumn(
-                Modifier.fillMaxSize().padding(top = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
-            ) {
-                items(list) {
-                    CardProductItem(product = it, Modifier.padding(horizontal = 16.dp))
-                }
             }
         }
 
@@ -86,7 +106,9 @@ fun HomeScreen(
 private fun HomeScreenPreviewSections() {
     ComposeBasicsTheme {
         Surface {
-            HomeScreen(sections)
+            HomeScreen(sections){
+
+            }
         }
     }
 }
@@ -96,7 +118,9 @@ private fun HomeScreenPreviewSections() {
 private fun HomeScreenPreviewFiltered() {
     ComposeBasicsTheme {
         Surface {
-            HomeScreen(sections, "Chocolate")
+            HomeScreen(sections, "Chocolate"){
+
+            }
         }
     }
 }

@@ -1,20 +1,19 @@
-package com.igor.composebasics
+package com.igor.composebasics.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.igor.composebasics.data.mock.sections
-import com.igor.composebasics.ui.screens.HomeScreen
+import androidx.compose.material3.Text
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
 
-class MainActivity : ComponentActivity() {
+class ProductFormActivity: ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeBasicsTheme {
-                HomeScreen(sections)
+                Text(text = "HELLOOOOOOOOOOOO")
             }
         }
     }
 }
-

@@ -6,7 +6,7 @@ import java.math.BigDecimal
 
 private val LoremIpsumSize = 35
 
-val products: List<Product> = listOf(
+val mockProducts: List<Product> = listOf(
     Product(
         name = "Hamburguer",
         price = BigDecimal("12.99"),
@@ -27,7 +27,7 @@ val products: List<Product> = listOf(
     )
 )
 
-val candies = listOf(
+val mockCandies = listOf(
     Product(
         name = "Chocolate",
         price = BigDecimal("3.99"),
@@ -48,7 +48,7 @@ val candies = listOf(
     )
 )
 
-val drinks = listOf(
+val mockDrinks = listOf(
     Product(
         name = "Cerveja",
         price = BigDecimal("5.99"),
@@ -75,8 +75,8 @@ val drinks = listOf(
     )
 )
 
-val sections = mapOf(
-    "Products" to products,
-    "Candies" to candies,
-    "Drinks" to drinks
+val mockSections = mapOf(
+    "Products" to mockProducts,
+    "Candies" to mockCandies,
+    "Drinks" to mockDrinks
 )

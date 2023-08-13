@@ -20,22 +20,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.igor.composebasics.data.models.Product
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
-import java.lang.IllegalArgumentException
 import java.math.BigDecimal
 import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.Currency
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormScreen() {
+fun FormScreen(onSaveClick: (Product) -> Unit) {
     var urlState by remember {
         mutableStateOf("")
     }
@@ -45,7 +48,11 @@ fun FormScreen() {
     }
 
     var price by remember {
-        mutableStateOf("")
+        mutableStateOf(
+            TextFieldValue(
+                text = ""
+            )
+        )
     }
 
     val formatter = remember { DecimalFormat("#.##") }
@@ -115,21 +122,32 @@ fun FormScreen() {
             label = {
                 Text(text = "Price")
             },
+            leadingIcon = {
+                Text(text = "R$")
+            },
             value = price,
-            onValueChange = {
-                try{
-                    formatter.format(BigDecimal(it))
-                }catch (ex: IllegalArgumentException){
-                    if(it.isBlank()){
-                        price = it
-                    }
+            onValueChange = { textFieldValue ->
+                try {
+                    val format: NumberFormat = NumberFormat.getCurrencyInstance()
+                    format.maximumFractionDigits = 2
+                    format.currency = null
+
+                    var result = format.format(BigDecimal(textFieldValue.text))
+                    price = TextFieldValue(
+                        text = result,
+                        selection = TextRange(2),
+                        composition = null,
+                    )
+                } catch (ex: Exception) {
+                    price = textFieldValue
                 }
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
             ),
-        )
+
+            )
 
         TextField(
             modifier = Modifier
@@ -150,12 +168,13 @@ fun FormScreen() {
 
         Button(modifier = Modifier.fillMaxWidth(), onClick = {
             val convertedPrice = try {
-                BigDecimal(price)
+                BigDecimal(price.text)
             } catch (ex: NumberFormatException) {
                 BigDecimal.ZERO
             }
 
             val product = Product(nameState, description, convertedPrice, urlState)
+            onSaveClick(product)
         }) {
             Text(text = "Save")
         }
@@ -169,7 +188,9 @@ fun FormScreen() {
 @Composable
 fun FormScreenPrefiew() {
     ComposeBasicsTheme {
-        FormScreen()
+        FormScreen() {
+
+        }
     }
 }
 

@@ -3,21 +3,19 @@ package com.igor.composebasics.ui.activities
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
-import com.igor.composebasics.dao.ProductsDAO
+import androidx.activity.viewModels
 import com.igor.composebasics.ui.screens.FormScreen
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
+import com.igor.composebasics.ui.viewmodels.ProductFormViewModel
 
 class ProductFormActivity : ComponentActivity() {
-
-    private val productsDAO = ProductsDAO()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val viewModel by viewModels<ProductFormViewModel>()
             ComposeBasicsTheme {
-                FormScreen(){
-                    productsDAO.save(it)
+                FormScreen(viewModel) {
                     finish()
                 }
             }

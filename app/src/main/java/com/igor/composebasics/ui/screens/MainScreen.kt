@@ -1,6 +1,5 @@
 package com.igor.composebasics.ui.screens
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,74 +17,39 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.igor.composebasics.data.mock.mockCandies
-import com.igor.composebasics.data.mock.mockDrinks
 import com.igor.composebasics.data.mock.mockSections
-import com.igor.composebasics.data.models.Product
 import com.igor.composebasics.ui.components.CardProductItem
 import com.igor.composebasics.ui.components.ProductsSection
 import com.igor.composebasics.ui.components.SearchTextField
-import com.igor.composebasics.ui.stateholders.HomeScreenStateHolder
+import com.igor.composebasics.ui.stateholders.HomeScreenUIState
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
+import com.igor.composebasics.ui.viewmodels.HomeScreenViewModel
 
 
 @Composable
 fun HomeScreen(
-    products: List<Product>,
+    homeScreenViewModel: HomeScreenViewModel,
     onFabClick: () -> Unit
 ) {
-    var text by remember {
-        mutableStateOf("")
-    }
-
-    val sections = mapOf(
-        "All Products" to products,
-        "Candies" to mockCandies,
-        "Drinks" to mockDrinks
-    )
-
-
-    val searchProducts = remember(text, products) {
-        if (!text.isNullOrBlank()) {
-            sections.entries.map { Pair(it.key, it.value) }
-                .toTypedArray().flatMap {
-                    it.second
-                }.filter {
-                    it.name.lowercase().contains(text.lowercase())
-                }
-        } else emptyList()
-    }
-
-    val homeState = remember(products, text) {
-        HomeScreenStateHolder(
-            sections = sections,
-            searchProducts = searchProducts,
-            searchText = text,
-            onSearchChange = {
-                text = it
-            },
-            onFabClick = onFabClick)
-    }
-
-    HomeScreen(homeState)
+    val homeState by homeScreenViewModel.uiState.collectAsState()
+    HomeScreen(homeState, onFabClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    state: HomeScreenStateHolder
+    state: HomeScreenUIState,
+    onFabClick: () -> Unit
 ) {
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(shape = CircleShape, onClick = state.onFabClick) {
+            FloatingActionButton(shape = CircleShape, onClick = onFabClick) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
         }
@@ -139,8 +103,13 @@ fun HomeScreen(
 private fun HomeScreenPreviewSections() {
     ComposeBasicsTheme {
         Surface {
-            HomeScreen(HomeScreenStateHolder(sections = mockSections) {
-            })
+            HomeScreen(
+                state = HomeScreenUIState(
+                    sections = mockSections
+                )
+            ) {
+
+            }
         }
     }
 }
@@ -150,8 +119,13 @@ private fun HomeScreenPreviewSections() {
 private fun HomeScreenPreviewFiltered() {
     ComposeBasicsTheme {
         Surface {
-            HomeScreen(HomeScreenStateHolder(mockSections, "Chocolate") {
-            })
+            HomeScreen(
+                state = HomeScreenUIState(
+                    sections = mockSections, searchText = "hamburguer",
+                )
+            ) {
+
+            }
         }
     }
 }

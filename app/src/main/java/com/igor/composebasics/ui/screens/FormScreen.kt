@@ -15,51 +15,38 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.igor.composebasics.data.models.Product
+import com.igor.composebasics.ui.stateholders.ProductFormUiState
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
-import java.math.BigDecimal
-import java.text.DecimalFormat
-import java.text.NumberFormat
-import java.util.Currency
+import com.igor.composebasics.ui.viewmodels.ProductFormViewModel
 
+
+@Composable
+fun FormScreen(
+    viewModel: ProductFormViewModel,
+    onSaveClick: () -> Unit = {}
+) {
+    val state by viewModel.uiState.collectAsState()
+    FormScreen(state = state) {
+        viewModel.save()
+        onSaveClick()
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormScreen(onSaveClick: (Product) -> Unit) {
-    var urlState by remember {
-        mutableStateOf("")
-    }
-
-    var nameState by remember {
-        mutableStateOf("")
-    }
-
-    var price by remember {
-        mutableStateOf(
-            TextFieldValue(
-                text = ""
-            )
-        )
-    }
-
-    val formatter = remember { DecimalFormat("#.##") }
-
-    var description by remember {
-        mutableStateOf("")
-    }
+fun FormScreen(
+    state: ProductFormUiState,
+    onSaveClick: () -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -77,25 +64,13 @@ fun FormScreen(onSaveClick: (Product) -> Unit) {
             text = "Create a product",
         )
 
-//        AsyncImage(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(200.dp),
-//            model = urlState,
-//            contentDescription = null,
-//            contentScale = ContentScale.Crop,
-//            placeholder = painterResource(id = R.drawable.placeholder)
-//        )
-
         TextField(
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text(text = "Image Url")
             },
-            value = urlState,
-            onValueChange = {
-                urlState = it
-            },
+            value = state.url,
+            onValueChange = state.onUrlChange,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Next
@@ -107,10 +82,8 @@ fun FormScreen(onSaveClick: (Product) -> Unit) {
             label = {
                 Text(text = "Product name")
             },
-            value = nameState,
-            onValueChange = {
-                nameState = it
-            },
+            value = state.name,
+            onValueChange = state.onNameChange,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
                 capitalization = KeyboardCapitalization.Words
@@ -125,29 +98,14 @@ fun FormScreen(onSaveClick: (Product) -> Unit) {
             leadingIcon = {
                 Text(text = "R$")
             },
-            value = price,
-            onValueChange = { textFieldValue ->
-                try {
-                    val format: NumberFormat = NumberFormat.getCurrencyInstance()
-                    format.maximumFractionDigits = 2
-                    format.currency = null
-
-                    var result = format.format(BigDecimal(textFieldValue.text))
-                    price = TextFieldValue(
-                        text = result,
-                        selection = TextRange(2),
-                        composition = null,
-                    )
-                } catch (ex: Exception) {
-                    price = textFieldValue
-                }
-            },
+            value = state.price,
+            onValueChange = state.onPriceChange,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
-            ),
-
             )
+
+        )
 
         TextField(
             modifier = Modifier
@@ -156,26 +114,15 @@ fun FormScreen(onSaveClick: (Product) -> Unit) {
             label = {
                 Text(text = "Description")
             },
-            value = description,
-            onValueChange = {
-                description = it
-            },
+            value = state.description,
+            onValueChange = state.onDescriptionChange,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
                 capitalization = KeyboardCapitalization.Sentences
             ),
         )
 
-        Button(modifier = Modifier.fillMaxWidth(), onClick = {
-            val convertedPrice = try {
-                BigDecimal(price.text)
-            } catch (ex: NumberFormatException) {
-                BigDecimal.ZERO
-            }
-
-            val product = Product(nameState, description, convertedPrice, urlState)
-            onSaveClick(product)
-        }) {
+        Button(modifier = Modifier.fillMaxWidth(), onClick = onSaveClick) {
             Text(text = "Save")
         }
 
@@ -188,7 +135,7 @@ fun FormScreen(onSaveClick: (Product) -> Unit) {
 @Composable
 fun FormScreenPrefiew() {
     ComposeBasicsTheme {
-        FormScreen() {
+        FormScreen(ProductFormUiState()) {
 
         }
     }

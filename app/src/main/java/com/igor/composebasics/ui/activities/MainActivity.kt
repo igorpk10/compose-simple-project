@@ -13,11 +13,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    val viewModel by viewModels<HomeScreenViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeBasicsTheme {
-                val viewModel by viewModels<HomeScreenViewModel>()
                 HomeScreen(viewModel) {
                     startActivity(Intent(this, ProductFormActivity::class.java))
                 }

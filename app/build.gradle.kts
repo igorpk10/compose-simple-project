@@ -1,3 +1,5 @@
+import org.gradle.initialization.Environment.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -20,6 +22,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "KEY", getApiKey())
     }
 
     buildTypes {
@@ -40,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -63,8 +68,13 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -78,4 +88,18 @@ dependencies {
 // Allow references to generated code
 kapt {
     correctErrorTypes = true
+}
+
+fun getApiKey(): String {
+    val items = HashMap<String, String>()
+
+    val fl = rootProject.file("apikey.properties")
+
+    (fl.exists())?.let {
+        fl.forEachLine {
+            items[it.split("=")[0]] = it.split("=")[1]
+        }
+    }
+
+    return items["PUBLIC_KEY"]!!
 }

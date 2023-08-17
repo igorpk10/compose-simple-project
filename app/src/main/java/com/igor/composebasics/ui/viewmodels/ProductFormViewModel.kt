@@ -1,19 +1,19 @@
 package com.igor.composebasics.ui.viewmodels
 
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.igor.composebasics.dao.ProductsDAO
 import com.igor.composebasics.data.models.Product
 import com.igor.composebasics.ui.stateholders.ProductFormUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.text.NumberFormat
+import javax.inject.Inject
 
-class ProductFormViewModel : ViewModel() {
+@HiltViewModel
+class ProductFormViewModel @Inject constructor() : ViewModel() {
 
     val productsDAO = ProductsDAO()
 

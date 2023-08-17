@@ -12,10 +12,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ProductFormActivity : ComponentActivity() {
 
+    val viewModel: ProductFormViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel by viewModels<ProductFormViewModel>()
+
             ComposeBasicsTheme {
                 FormScreen(viewModel) {
                     finish()

@@ -8,12 +8,15 @@ import com.igor.composebasics.data.mock.mockDrinks
 import com.igor.composebasics.data.mock.mockProducts
 import com.igor.composebasics.data.models.Product
 import com.igor.composebasics.ui.stateholders.HomeScreenUIState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeScreenViewModel : ViewModel() {
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor() : ViewModel() {
 
     private val productsDAO = ProductsDAO()
 

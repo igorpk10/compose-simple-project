@@ -8,7 +8,9 @@ import androidx.activity.viewModels
 import com.igor.composebasics.ui.screens.HomeScreen
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
 import com.igor.composebasics.ui.viewmodels.HomeScreenViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

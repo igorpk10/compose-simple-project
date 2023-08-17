@@ -7,7 +7,9 @@ import androidx.activity.viewModels
 import com.igor.composebasics.ui.screens.FormScreen
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
 import com.igor.composebasics.ui.viewmodels.ProductFormViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProductFormActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

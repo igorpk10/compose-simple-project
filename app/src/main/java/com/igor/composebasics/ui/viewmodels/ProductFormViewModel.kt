@@ -2,7 +2,7 @@ package com.igor.composebasics.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.igor.composebasics.dao.ProductsDAO
-import com.igor.composebasics.data.models.Product
+import com.igor.composebasics.domain.models.Product
 import com.igor.composebasics.ui.stateholders.ProductFormUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

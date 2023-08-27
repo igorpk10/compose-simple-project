@@ -1,4 +1,6 @@
-import org.gradle.initialization.Environment.Properties
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -23,7 +25,7 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "KEY", getApiKey())
+        buildConfigField("String", "API_KEY", getApiKey())
     }
 
     buildTypes {
@@ -70,11 +72,14 @@ dependencies {
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("androidx.paging:paging-compose:3.2.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -91,15 +96,13 @@ kapt {
 }
 
 fun getApiKey(): String {
-    val items = HashMap<String, String>()
-
     val fl = rootProject.file("apikey.properties")
 
-    (fl.exists())?.let {
-        fl.forEachLine {
-            items[it.split("=")[0]] = it.split("=")[1]
-        }
+    try {
+        val properties = Properties()
+        properties.load(FileInputStream(fl))
+        return properties.getProperty("KEY")
+    }catch (ex: Exception){
+        throw FileNotFoundException("API KEY NOT FOUND")
     }
-
-    return items["PUBLIC_KEY"]!!
 }

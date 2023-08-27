@@ -1,12 +1,18 @@
 package com.igor.composebasics.ui.screens
 
+import android.widget.TextView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -17,7 +23,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,10 +40,11 @@ import com.igor.composebasics.ui.viewmodels.ProductFormViewModel
 @Composable
 fun FormScreen(
     viewModel: ProductFormViewModel,
+    onOpenPicturesScreen: () -> Unit = {},
     onSaveClick: () -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
-    FormScreen(state = state) {
+    FormScreen(state = state, onOpenPicturesScreen) {
         viewModel.save()
         onSaveClick()
     }
@@ -45,6 +54,7 @@ fun FormScreen(
 @Composable
 fun FormScreen(
     state: ProductFormUiState,
+    onOpenPicturesScreen: () -> Unit = {},
     onSaveClick: () -> Unit
 ) {
 
@@ -64,18 +74,35 @@ fun FormScreen(
             text = "Create a product",
         )
 
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
-            label = {
-                Text(text = "Image Url")
-            },
-            value = state.url,
-            onValueChange = state.onUrlChange,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Uri,
-                imeAction = ImeAction.Next
-            ),
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .background(Color.Gray)
+                .clickable {
+                    onOpenPicturesScreen()
+                },
+            Alignment.Center
+        ) {
+            Text(
+                modifier = Modifier.fillMaxSize(),
+                color = Color.White,
+                text = "Clique para seleciona uma imagem"
+            )
+        }
+
+//        TextField(
+//            modifier = Modifier.fillMaxWidth().clickable {  },
+//            label = {
+//                Text(text = "Image Url")
+//            },
+//            value = state.url,
+//            onValueChange = state.onUrlChange,
+//            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Uri,
+//                imeAction = ImeAction.Next
+//            ),
+//        )
 
         TextField(
             modifier = Modifier.fillMaxWidth(),

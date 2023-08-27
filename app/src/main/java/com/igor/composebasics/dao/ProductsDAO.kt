@@ -1,8 +1,6 @@
 package com.igor.composebasics.dao
 
-import androidx.compose.runtime.mutableStateListOf
-import com.igor.composebasics.data.mock.mockProducts
-import com.igor.composebasics.data.models.Product
+import com.igor.composebasics.domain.models.Product
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

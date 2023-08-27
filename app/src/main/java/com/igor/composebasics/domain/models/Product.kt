@@ -1,4 +1,4 @@
-package com.igor.composebasics.data.models
+package com.igor.composebasics.domain.models
 
 import java.math.BigDecimal
 

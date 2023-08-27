@@ -56,7 +56,7 @@ fun HomeScreen(
     ) { paddingValues ->
         Box(Modifier.padding(paddingValues)) {
             Column {
-                SearchTextField(state.searchText, state.onSearchChange)
+                SearchTextField(state.searchText, state.onSearchDone ,state.onSearchChange)
 
                 if (state.isShowSection()) {
                     LazyColumn(

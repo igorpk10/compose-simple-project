@@ -1,7 +1,7 @@
 package com.igor.composebasics.data.mock
 
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
-import com.igor.composebasics.data.models.Product
+import com.igor.composebasics.domain.models.Product
 import java.math.BigDecimal
 
 private val LoremIpsumSize = 35

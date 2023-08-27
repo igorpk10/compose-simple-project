@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.igor.composebasics.data.mock.mockProducts
-import com.igor.composebasics.data.models.Product
+import com.igor.composebasics.domain.models.Product
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
 
 @Composable

@@ -3,6 +3,7 @@ package com.igor.composebasics.ui.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -11,6 +12,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -20,9 +23,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SearchTextField(
     searchText: String,
-    onSearchChange: (String) -> Unit,
+    onSearchDone: () -> Unit,
+    onSearchChanged: (String) -> Unit,
 ) {
-
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -30,7 +33,7 @@ fun SearchTextField(
         shape = RoundedCornerShape(100),
         maxLines = 1,
         value = searchText, onValueChange = { value ->
-            onSearchChange(value)
+            onSearchChanged(value)
         },
         leadingIcon = {
             Icon(Icons.Default.Search, contentDescription = "Search icon")
@@ -42,7 +45,12 @@ fun SearchTextField(
             Text(text = "What product you need?")
         },
         keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Done
+            imeAction = ImeAction.Done,
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onSearchDone()
+            }
         )
     )
 }

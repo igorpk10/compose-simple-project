@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.igor.composebasics.R
 import com.igor.composebasics.extensions.toBrazilianCurrency
-import com.igor.composebasics.data.models.Product
+import com.igor.composebasics.domain.models.Product
 import com.igor.composebasics.ui.theme.ComposeBasicsTheme
 import java.math.BigDecimal
 

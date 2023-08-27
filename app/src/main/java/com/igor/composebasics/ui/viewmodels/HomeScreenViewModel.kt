@@ -6,7 +6,7 @@ import com.igor.composebasics.dao.ProductsDAO
 import com.igor.composebasics.data.mock.mockCandies
 import com.igor.composebasics.data.mock.mockDrinks
 import com.igor.composebasics.data.mock.mockProducts
-import com.igor.composebasics.data.models.Product
+import com.igor.composebasics.domain.models.Product
 import com.igor.composebasics.ui.stateholders.HomeScreenUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
